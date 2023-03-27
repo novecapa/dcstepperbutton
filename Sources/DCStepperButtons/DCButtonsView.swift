@@ -28,6 +28,7 @@ public class DCButtonsView: UIView {
     
     public var delegate: DCButtonsViewProtocol?
 
+    @IBOutlet var contentView: UIView!
     // MARK: Button decrease
     @IBOutlet weak var dcButtonDecrease: UIButton!
     private var timerDecrease: Timer?

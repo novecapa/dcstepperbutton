@@ -15,6 +15,13 @@ public protocol DCButtonsViewProtocol {
     func singleIncrease()
 }
 
+extension DCButtonsViewProtocol {
+    func longDecrease() { }
+    func singleDecrease() { }
+    func longIncrease() { }
+    func singleIncrease() { }
+}
+
 public class DCButtonsView: UIView {
     
     public static let identifier = "DCButtonsView"
@@ -31,9 +38,24 @@ public class DCButtonsView: UIView {
     // MARK: Configurable values
     public var timeInterval = 0.5 // In ms
     // MARK: Init
-    public override func awakeFromNib() {
-        super.awakeFromNib()
-        
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    private func commonInit() {
+        Bundle.main.loadNibNamed(DCButtonsView.identifier,
+                                 owner: self,
+                                 options: nil)
+        addSubview(contentView)
+        contentView.frame = self.bounds
+        contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+
         // MARK: Add gesture decrease
         let longPressDecrease = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressDecrease(gesture:)))
         longPressDecrease.minimumPressDuration = 1
@@ -43,6 +65,7 @@ public class DCButtonsView: UIView {
         longPressIncrease.minimumPressDuration = 1
         self.dcButtonIncrease.addGestureRecognizer(longPressIncrease)
     }
+
     // MARK: Decrease gesture action
     @objc func longPressDecrease(gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
@@ -82,38 +105,5 @@ public class DCButtonsView: UIView {
     @IBAction func dcButtonIncrease(sender: UIButton) {
         // print("Increase tapped")
         delegate?.singleIncrease()
-    }
-    private static func getBundle() -> Bundle   {
-        let matches = Bundle.allFrameworks.filter { (aBundle) -> Bool in
-             if let identifier = aBundle.bundleIdentifier {
-                return identifier.contains("dcbuttonlp") && aBundle.isLoaded
-             } else {
-                 return false
-             }
-        }
-        if matches.count == 0 {
-            return Bundle(for: DCButtonsView.self)
-        } else {
-            return matches.last!
-        }
-    }
-    public static func getDCButtonsView() -> DCButtonsView? {
-        return UIView.fromNib(named: DCButtonsView.identifier, bundle: getBundle()) as? DCButtonsView
-    }
-}
-// MARK: - UIView
-public extension UIView {
-    class func fromNib(named: String? = nil, bundle: Bundle) -> Self {
-        let name = named ?? "\(Self.self)"
-        guard
-            let nib = bundle.loadNibNamed(name, owner: nil, options: nil)
-        else { fatalError("missing expected nib named: \(name)") }
-        guard
-            // we're using `first` here because compact map chokes compiler on
-            // optimized release, so you can't use two views in one nib if you wanted to
-            // and are now looking at this
-            let view = nib.first as? Self
-        else { fatalError("view of type \(Self.self) not found in \(nib)") }
-        return view
     }
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DCStepperButtonViewProtocol {
+public protocol DCStepperButtonViewProtocol {
     func longDecrease()
     func singleDecrease()
     func longIncrease()
@@ -22,11 +22,11 @@ extension DCStepperButtonViewProtocol {
     func singleIncrease() { }
 }
 
-class DCStepperButtonView: UIView {
+public class DCStepperButtonView: UIView {
 
     static let identifier = "DCStepperButtonView"
 
-    var delegate: DCStepperButtonViewProtocol?
+    public var delegate: DCStepperButtonViewProtocol?
 
     @IBOutlet var contentView: UIView!
     // MARK: Button decrease
@@ -37,7 +37,7 @@ class DCStepperButtonView: UIView {
     private var timerIncrease: Timer?
     private var currentValue = 0
     // MARK: Configurable values
-    var timeInterval = 0.5 // In ms
+    public var timeInterval = 0.5 // In ms
 
     override init(frame: CGRect) {
         super.init(frame: frame)

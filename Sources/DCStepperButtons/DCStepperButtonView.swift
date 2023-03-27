@@ -1,32 +1,32 @@
 //
-//  DCButtonsView.swift
-//  DCButton
+//  DCStepperButtonView.swift
+//  zeroon
 //
-//  Created by Josep Cerdà Penadés on 15/6/22.
+//  Created by Josep Cerdà Penadés on 27/3/23.
+//  Copyright © 2023 DAAP coders, S.L. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-public protocol DCButtonsViewProtocol {
+protocol DCStepperButtonViewProtocol {
     func longDecrease()
     func singleDecrease()
     func longIncrease()
     func singleIncrease()
 }
 
-extension DCButtonsViewProtocol {
+extension DCStepperButtonViewProtocol {
     func longDecrease() { }
     func singleDecrease() { }
     func longIncrease() { }
     func singleIncrease() { }
 }
 
-public class DCButtonsView: UIView {
-    
-    public static let identifier = "DCButtonsView"
-    
-    public var delegate: DCButtonsViewProtocol?
+class DCStepperButtonView: UIView {
+
+    static let identifier = "DCStepperButtonView"
+
+    var delegate: DCStepperButtonViewProtocol?
 
     @IBOutlet var contentView: UIView!
     // MARK: Button decrease
@@ -37,20 +37,20 @@ public class DCButtonsView: UIView {
     private var timerIncrease: Timer?
     private var currentValue = 0
     // MARK: Configurable values
-    public var timeInterval = 0.5 // In ms
-    // MARK: Init
+    var timeInterval = 0.5 // In ms
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
 
     private func commonInit() {
-        Bundle.main.loadNibNamed(DCButtonsView.identifier,
+        Bundle.main.loadNibNamed(DCStepperButtonView.identifier,
                                  owner: self,
                                  options: nil)
         addSubview(contentView)
